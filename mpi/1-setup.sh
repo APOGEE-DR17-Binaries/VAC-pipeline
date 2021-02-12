@@ -5,20 +5,19 @@
 #SBATCH -n 80
 #SBATCH -t 04:00:00
 #SBATCH -p cca
-#SBATCH --constraint=skylake
 
 source ~/.bash_profile
 init_conda
-conda activate hq
-echo $HQ_RUN
+conda activate dr17-binaries
+echo $HQ_RUN_PATH
 
-cd /mnt/ceph/users/apricewhelan/projects/hq/scripts
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-# stdbuf -o0 -e0 mpirun -n $SLURM_NTASKS python3 -m mpi4py.futures make_prior_cache.py --name $HQ_RUN -v --mpiasync -v
-stdbuf -o0 -e0 mpirun -n $SLURM_NTASKS python3 make_prior_cache.py --name $HQ_RUN -v --mpi -v
+mpirun -n $SLURM_NTASKS python3 -m mpi4py.run -rc thread_level='funneled' \
+hq make_prior_cache -v --mpi
 
-stdbuf -o0 -e0 python3 make_tasks.py --name $HQ_RUN -v
+hq make_tasks -v
 
 date
