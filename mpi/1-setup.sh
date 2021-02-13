@@ -2,9 +2,10 @@
 #SBATCH -J apogee-setup
 #SBATCH -o logs/apogee-setup.o%j
 #SBATCH -e logs/apogee-setup.e%j
-#SBATCH -n 80
+#SBATCH -N 2
 #SBATCH -t 04:00:00
 #SBATCH -p cca
+#SBATCH -C skylake
 
 source ~/.bash_profile
 init_conda
@@ -15,8 +16,8 @@ cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-mpirun -n $SLURM_NTASKS python3 -m mpi4py.run -rc thread_level='funneled' \
-hq make_prior_cache -v --mpi
+mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
+$CONDA_PREFIX/bin/hq make_prior_cache -v --mpi
 
 hq make_tasks -v
 
