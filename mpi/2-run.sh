@@ -2,10 +2,11 @@
 #SBATCH -J apogee-run
 #SBATCH -o logs/apogee-run.o%j
 #SBATCH -e logs/apogee-run.e%j
-#SBATCH -N 16
+#SBATCH -N 8
+#SBATCH --ntasks-per-node=64
 #SBATCH -t 72:00:00
 #SBATCH -p cca
-#SBATCH --constraint=skylake
+#SBATCH --constraint=rome
 
 source ~/.bash_profile
 init_conda
