@@ -36,6 +36,10 @@
 % \newcommand{\ngold}{\ensuremath{1\,032}}
 % \newcommand{\nbimodal}{\ensuremath{127}}
 
+% Other
+\newcommand{\visit}{\textit{visit}}
+\newcommand{\thisdr}{\dr{17}}
+
 \graphicspath{{figures/}}
 \input{preamble.tex}
 
@@ -330,15 +334,73 @@ cuts).
 % \end{figure}
 
 
-\subsection{Visit Velocity Uncertainty Calibration} \label{sec:visitcalib}
+\subsection{Re-calibrating the \apogee\ Visit Velocity Uncertainties}
+\label{sec:visitcalib}
 
-The key data used in this work are the \apogee\ visit-level radial velocity
-measurements, which are derived by cross-correlating each visit spectrum with an
-empirical template spectrum that is derived from TODO \cite{TODO}. % cite
-Doppler / DR17 paper?
-From this procedure, the \apogee\ pipeline generates the visit velocities and an estimate of the uncertainty on each velocity measurement, computed using a TODO ... signal-to-noise scaling ....
+The principal data product used in this work are the \apogee\ ``\visit'' radial
+velocity measurements (RVs), which are released in the ``allVisit'' data file.
+Each \apogee\ visit spectrum for a source is generated from a nightly
+combination of individual exposures that are all typically taken within a 1--2
+hour time block on a given night.
+The visit spectra thus provide time-resolved stellar parameters with a minimum
+time separation of about one day.
+For the most recent data release, \apogee\ \thisdr, the RVs for
+each source's visit spectra are derived using a new, more accurate, and more
+stable pipeline,
+\package{doppler},\footnote{\url{https://github.com/dnidever/doppler}}
+which ultimately computes the RVs by cross-correlating a given visit spectrum
+with a template spectrum whose stellar parameters are set by an initial guess of
+the combined (over all visits) spectrum for the source.
+% ^ TODO: cite Doppler / DR17 paper?
+From this procedure, the \apogee\ pipeline generates the visit RVs and an
+estimate of the uncertainty associated with each visit RV measurement, computed
+using TODO \citep{TODO}.
 
-TODO: HERE
+When using RV measurements to infer binary star orbital parameters, the
+precision of the derived parameters is strongly dependent on both the intrinsic
+and the reported uncertainties of the RV data.
+The intrinsic RV measurement uncertainties set the theoretical,
+minimum-amplitude detectability thresholds for RV-variable sources.
+The \emph{reported} RV uncertainties also affect the orbital parameter samplings
+returned:
+For example, if the reported uncertainties are underestimated, we will in
+general find that scatter between the visit RV measurements (because of the
+intrinsic noise) is interpreted as binarity, which will bias any
+population-level inferences we can make about the binary fraction, among other
+parameters.
+If the uncertainties are overestimated, we will preferentially miss
+low-amplitude RV variations, which will limit our sensitivity to longer-period
+and lower-mass systems.
+
+We have found that the visit RV uncertainties in \apogee\ \thisdr\ are
+underestimated, as has been pointed out for previous iterations of the pipeline
+as well \citep[e.g.,][]{TODO, BadenesIthink, Price-Whelan:2020}.
+To demonstrate this, we select stars with successfully-measured stellar
+parameters (\logg, \Teff, \mh, \vsini) in \apogee\ \thisdr.
+We then select visits for which there is no detected secondary stellar spectrum
+(i.e., SB2 systems; \texttt{N\_COMPONENTS==1}), which have no RV quality flags
+triggered (\texttt{RV\_FLAG==0}), and which have good-quality combined-source
+spectra (i.e., the \texttt{STARFLAG} bitmask must not contain bits
+\texttt{VERY\_BRIGHT\_NEIGHBOR}, \texttt{PERSIST\_HIGH}, or
+\texttt{SUSPECT\_RV\_COMBINATION}).
+We only keep visits when a source has three or more total visits that pass these
+quality checks.
+\figurename~\ref{fig:chiplots} (left panel) shows the distribution of
+uncertainty-normalized differences between visit RVs $v_{nk}$ minus the mean
+over each source's visits $\langle v_{nk} \rangle_k$ for all $k$ visits of a
+source $n$, for all sources with three or more visits that pass the quality cuts
+described above.
+
+\begin{figure}[!t]
+\begin{center}
+% \includegraphics[width=0.9\textwidth]{visitstats.pdf}
+{\color{red} Figure placeholder}
+\end{center}
+\caption{%
+TODO
+\label{fig:chiplots}
+}
+\end{figure}
 
 
 
