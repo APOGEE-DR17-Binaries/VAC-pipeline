@@ -2,22 +2,21 @@
 #SBATCH -J apogee-const
 #SBATCH -o logs/apogee-const.o%j
 #SBATCH -e logs/apogee-const.e%j
-#SBATCH -n 400
+#SBATCH -N 10
 #SBATCH -t 24:00:00
 #SBATCH -p cca
 #SBATCH --constraint=skylake
 
 source ~/.bash_profile
 init_conda
-conda activate hq
-echo $HQ_RUN
+conda activate apogee-dr17-binaries
+echo $HQ_RUN_PATH
 
-cd /mnt/ceph/users/apricewhelan/projects/hq/scripts
-
-date
-
-mpirun -n $SLURM_NTASKS python3 run_fit_constant.py --name $HQ_RUN -v --mpi -o
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-# --constraint=skylake
+mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
+$CONDA_PREFIX/bin/hq run_constant -v --mpi
+
+date

@@ -2,22 +2,21 @@
 #SBATCH -J apogee-analyze
 #SBATCH -o logs/apogee-analyze.o%j
 #SBATCH -e logs/apogee-analyze.e%j
-#SBATCH -n 80
+#SBATCH -N 2
 #SBATCH -t 16:00:00
-#SBATCH -p gen
+#SBATCH -p cca 
 #SBATCH --constraint=skylake
 
 source ~/.bash_profile
 init_conda
-conda activate hq2
-echo $HQ_RUN
+conda activate dr17-binaries
+echo $HQ_RUN_PATH
 
-cd /mnt/ceph/users/apricewhelan/projects/hq/scripts
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-stdbuf -o0 -e0 mpirun -n $SLURM_NTASKS python3  analyze_joker_samplings.py --name $HQ_RUN -v --mpi
-
-python run_continue_mcmc.py --name $HQ_RUN -v
+mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
+$CONDA_PREFIX/bin/hq analyze_thejoker -v --mpi
 
 date

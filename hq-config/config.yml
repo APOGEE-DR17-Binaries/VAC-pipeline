@@ -42,7 +42,7 @@ time_scale: tdb
 ##
 
 ## Name of the prior definition file:
-prior_file: 'prior.py'
+prior_file: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/hq-config/prior.py
 
 ## Number of prior samples to generate and cache:
 n_prior_samples: 200_000_000
