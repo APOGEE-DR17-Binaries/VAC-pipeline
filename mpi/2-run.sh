@@ -2,9 +2,9 @@
 #SBATCH -J apogee-run
 #SBATCH -o logs/apogee-run.o%j
 #SBATCH -e logs/apogee-run.e%j
-#SBATCH -N 12
+#SBATCH -N 8
 #SBATCH --ntasks-per-node=56
-#SBATCH -t 72:00:00
+#SBATCH -t 36:00:00
 #SBATCH -p cca
 #SBATCH --constraint=rome
 
