@@ -5,7 +5,7 @@
 *.brf
 *.log
 *.out
-*.pdf
+dr17binaries.pdf
 *.synctex.gz*
 *Notes.bib
 *.png
