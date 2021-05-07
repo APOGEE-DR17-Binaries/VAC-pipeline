@@ -1,5 +1,16 @@
 % TODO:
 
+% \begin{figure}[!t]
+% \begin{center}
+% % \includegraphics[width=0.9\textwidth]{visitstats.pdf}
+% {\color{red} Figure placeholder}
+% \end{center}
+% \caption{%
+% TODO
+% \label{fig:chiplots}
+% }
+% \end{figure}
+
 \PassOptionsToPackage{usenames,dvipsnames}{xcolor}
 \documentclass[modern]{aastex63}
 % \documentclass[twocolumn]{aastex63}
@@ -37,7 +48,7 @@
 % \newcommand{\nbimodal}{\ensuremath{127}}
 
 % Other
-\newcommand{\visit}{\textit{visit}}
+\newcommand{\visit}{visit}
 \newcommand{\thisdr}{\dr{17}}
 
 \graphicspath{{figures/}}
@@ -338,7 +349,8 @@ cuts).
 \label{sec:visitcalib}
 
 The principal data product used in this work are the \apogee\ ``\visit'' radial
-velocity measurements (RVs), which are released in the ``allVisit'' data file.
+velocity measurements (RVs).
+% , which are released in the ``allVisit'' data file.
 Each \apogee\ visit spectrum for a source is generated from a nightly
 combination of individual exposures that are all typically taken within a 1--2
 hour time block on a given night.
@@ -359,7 +371,7 @@ using TODO \citep{TODO}.
 When using RV measurements to infer binary star orbital parameters, the
 precision of the derived parameters is strongly dependent on both the intrinsic
 and the reported uncertainties of the RV data.
-The intrinsic RV measurement uncertainties set the theoretical,
+The \emph{intrinsic} RV measurement uncertainties set the theoretical,
 minimum-amplitude detectability thresholds for RV-variable sources.
 The \emph{reported} RV uncertainties also affect the orbital parameter samplings
 returned:
@@ -374,27 +386,28 @@ and lower-mass systems.
 
 We have found that the visit RV uncertainties in \apogee\ \thisdr\ are
 underestimated, as has been pointed out for previous iterations of the pipeline
-as well \citep[e.g.,][]{TODO, BadenesIthink, Price-Whelan:2020}.
-To demonstrate this, we select stars with successfully-measured stellar
-parameters (\logg, \Teff, \mh, \vsini) in \apogee\ \thisdr.
+\citep[e.g.,][]{TODO, BadenesIthink, Price-Whelan:2020}.
+To demonstrate this for \thisdr, we select stars with successfully-measured
+stellar parameters (\logg, \Teff, \mh, \vsini) in \apogee\ \thisdr.
 We then select visits for which there is no detected secondary stellar spectrum
 (i.e., SB2 systems; \texttt{N\_COMPONENTS==1}), which have no RV quality flags
 triggered (\texttt{RV\_FLAG==0}), and which have good-quality combined-source
 spectra (i.e., the \texttt{STARFLAG} bitmask must not contain bits
-\texttt{VERY\_BRIGHT\_NEIGHBOR}, \texttt{PERSIST\_HIGH}, or
-\texttt{SUSPECT\_RV\_COMBINATION}).
+\texttt{VERY\_BRIGHT\_NEIGHBOR}, \texttt{PERSIST\_HIGH},
+\texttt{SUSPECT\_RV\_COMBINATION}, \texttt{RV\_REJECT}, or
+\texttt{RV\_SUSPECT}).
 We only keep visits when a source has three or more total visits that pass these
 quality checks.
 \figurename~\ref{fig:chiplots} (left panel) shows the distribution of
-uncertainty-normalized differences between visit RVs $v_{nk}$ minus the mean
+uncertainty-normalized differences between the visit RVs $v_{nk}$ minus the mean
 over each source's visits $\langle v_{nk} \rangle_k$ for all $k$ visits of a
 source $n$, for all sources with three or more visits that pass the quality cuts
 described above.
 
+% Visit-error-calibrate.ipynb
 \begin{figure}[!t]
 \begin{center}
-% \includegraphics[width=0.9\textwidth]{visitstats.pdf}
-{\color{red} Figure placeholder}
+\includegraphics[width=\textwidth]{chi-distr.pdf}
 \end{center}
 \caption{%
 TODO
@@ -402,6 +415,17 @@ TODO
 }
 \end{figure}
 
+
+% Visit-error-calibrate.ipynb
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{mean-visit-rv-err.pdf}
+\end{center}
+\caption{%
+TODO
+\label{fig:mean-rv-err}
+}
+\end{figure}
 
 
 
