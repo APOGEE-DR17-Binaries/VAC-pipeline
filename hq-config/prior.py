@@ -31,7 +31,7 @@ with pm.Model() as model:
     prior_mcmc = tj.JokerPrior.default(
         P_min=1.5*u.day, P_max=16384*u.day,
         sigma_K0=30*u.km/u.s,
-        sigma_v=150*u.km/u.s,
+        sigma_v=100*u.km/u.s,
         s=s,
         pars={'M0': M0, 'omega': omega}
     )
