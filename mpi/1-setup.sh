@@ -5,7 +5,7 @@
 #SBATCH -N 2
 #SBATCH -t 04:00:00
 #SBATCH -p cca
-#SBATCH -C skylake
+#SBATCH -C rome
 
 source ~/.bash_profile
 init_conda

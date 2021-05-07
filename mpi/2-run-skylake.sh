@@ -2,7 +2,7 @@
 #SBATCH -J apogee-run
 #SBATCH -o logs/apogee-run.o%j
 #SBATCH -e logs/apogee-run.e%j
-#SBATCH -N 12
+#SBATCH -N 1
 # --ntasks-per-node=64
 #SBATCH -t 72:00:00
 #SBATCH -p cca
