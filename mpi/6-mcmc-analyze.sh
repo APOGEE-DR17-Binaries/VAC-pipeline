@@ -2,20 +2,21 @@
 #SBATCH -J apogee-analyze-mcmc
 #SBATCH -o logs/apogee-analyze-mcmc.o%j
 #SBATCH -e logs/apogee-analyze-mcmc.e%j
-#SBATCH -n 40
-#SBATCH -t 16:00:00
+#SBATCH -N 5
+#SBATCH -t 6:00:00
 #SBATCH -p cca
-#SBATCH --constraint=skylake
+#SBATCH --constraint=rome
 
 source ~/.bash_profile
 init_conda
-conda activate hq5
-echo $HQ_RUN
+conda activate dr17-binaries
+echo $HQ_RUN_PATH
 
-cd /mnt/ceph/users/apricewhelan/projects/hq/scripts
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-stdbuf -o0 -e0 mpirun -n $SLURM_NTASKS python3 analyze_mcmc_samplings.py --name $HQ_RUN -v --mpi
+mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
+$CONDA_PREFIX/bin/hq analyze_mcmc -v --mpi
 
 date

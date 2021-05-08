@@ -9,7 +9,7 @@ import thejoker as tj
 defaults = {
     'P_min': 1.5 * u.day,
     'P_max': 16384 * u.day,
-    'sigma_v': 150 * u.km/u.s,
+    'sigma_v': 100 * u.km/u.s,
     'sigma_K0': 30 * u.km/u.s
 }
 

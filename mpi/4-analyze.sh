@@ -2,10 +2,10 @@
 #SBATCH -J apogee-analyze
 #SBATCH -o logs/apogee-analyze.o%j
 #SBATCH -e logs/apogee-analyze.e%j
-#SBATCH -N 2
-#SBATCH -t 16:00:00
+#SBATCH -N 5
+#SBATCH -t 6:00:00
 #SBATCH -p cca 
-#SBATCH --constraint=skylake
+#SBATCH --constraint=rome
 
 source ~/.bash_profile
 init_conda

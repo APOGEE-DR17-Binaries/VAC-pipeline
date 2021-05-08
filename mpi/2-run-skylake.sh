@@ -1,11 +1,13 @@
 #!/bin/bash
-#SBATCH -J apogee-setup
-#SBATCH -o logs/apogee-setup.o%j
-#SBATCH -e logs/apogee-setup.e%j
-#SBATCH -N 2
-#SBATCH -t 04:00:00
+#SBATCH -J apogee-run
+#SBATCH -o logs/apogee-run.o%j
+#SBATCH -e logs/apogee-run.e%j
+#SBATCH -N 1
+# --ntasks-per-node=64
+#SBATCH -t 72:00:00
 #SBATCH -p cca
-#SBATCH -C rome
+#SBATCH --constraint=skylake
+# --constraint=rome
 
 source ~/.bash_profile
 init_conda
@@ -17,8 +19,7 @@ cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 date
 
 mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
-$CONDA_PREFIX/bin/hq make_prior_cache -v --mpi
-
-hq make_tasks -v
+$CONDA_PREFIX/bin/hq run_thejoker -v --mpi
 
 date
+
