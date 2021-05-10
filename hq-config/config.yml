@@ -72,8 +72,8 @@ init_batch_size: null
 ##
 
 ## These parameters are passed directly to pymc3.sample()
-tune: 1000
-draws: 4000
+tune: 2000
+draws: 10000
 
 ## This is the target acceptance ratio used for computing the dense mass matrix:
 target_accept: 0.95
