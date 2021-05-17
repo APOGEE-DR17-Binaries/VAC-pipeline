@@ -1,9 +1,8 @@
 # Imports we typically need for defining the prior:
-import astropy.coordinates as coord
 import astropy.units as u
 import pymc3 as pm
 import exoplanet.units as xu
-from exoplanet.distributions import Angle
+from pymc3_ext.distributions import Angle
 import numpy as np
 import thejoker as tj
 import theano.tensor as tt
@@ -39,68 +38,7 @@ def get_prior(**kwargs):
     return prior, model
 
 
-def pick_M0_omega_parametrization(MAP_sample, model):
-    wrap = np.pi * u.rad
-    M0 = coord.Angle(MAP_sample['M0']).wrap_at(wrap)
-    omega = coord.Angle(MAP_sample['omega']).wrap_at(wrap)
-    M0_m_omega = coord.Angle(M0 - omega).wrap_at(wrap)
-    M0_p_omega = coord.Angle(M0 + omega).wrap_at(wrap)
-
-    angles = np.array([x.radian for x in [M0, omega, M0_m_omega, M0_p_omega]])
-    angle_names = np.array(['M0', 'omega', 'M0_m_omega', 'M0_p_omega'])
-
-    angle_names = set(angle_names[np.argsort(np.abs(angles))][:2])
-
-    with model:
-        if angle_names == {'M0', 'omega'}:
-            M0 = xu.with_unit(Angle('M0'), u.radian)
-            omega = xu.with_unit(Angle('omega'), u.radian)
-
-        elif angle_names == {'M0', 'M0_m_omega'}:
-            M0 = xu.with_unit(Angle('M0'), u.radian)
-            M0_m_omega = xu.with_unit(Angle('M0_m_omega'), u.radian)
-            omega = xu.with_unit(
-                pm.Deterministic('omega', M0 - M0_m_omega),
-                u.radian)
-
-        elif angle_names == {'M0', 'M0_p_omega'}:
-            M0 = xu.with_unit(Angle('M0'), u.radian)
-            M0_p_omega = xu.with_unit(Angle('M0_p_omega'), u.radian)
-            omega = xu.with_unit(
-                pm.Deterministic('omega', M0_p_omega - M0),
-                u.radian)
-
-        elif angle_names == {'omega', 'M0_m_omega'}:
-            omega = xu.with_unit(Angle('omega'), u.radian)
-            M0_m_omega = xu.with_unit(Angle('M0_m_omega'), u.radian)
-            M0 = xu.with_unit(
-                pm.Deterministic('M0', M0_m_omega + omega),
-                u.radian)
-
-        elif angle_names == {'omega', 'M0_p_omega'}:
-            omega = xu.with_unit(Angle('omega'), u.radian)
-            M0_p_omega = xu.with_unit(Angle('M0_p_omega'), u.radian)
-            M0 = xu.with_unit(
-                pm.Deterministic('M0', M0_p_omega - omega),
-                u.radian)
-
-        elif angle_names == {'M0_m_omega', 'M0_p_omega'}:
-            M0_m_omega = xu.with_unit(Angle('M0_m_omega'), u.radian)
-            M0_p_omega = xu.with_unit(Angle('M0_p_omega'), u.radian)
-            M0 = xu.with_unit(
-                pm.Deterministic('M0', 0.5 * (M0_p_omega + M0_m_omega)),
-                u.radian)
-            omega = xu.with_unit(
-                pm.Deterministic('omega', 0.5 * (M0_p_omega - M0_m_omega)),
-                u.radian)
-
-        else:
-            raise ValueError('TODO')
-
-    return M0, omega
-
-
-def get_prior_mcmc(MAP_sample=None, fixed_s=False, **kwargs):
+def get_prior_mcmc(MAP_sample, fixed_s=False, **kwargs):
     for k, v in defaults.items():
         kwargs.setdefault(k, v)
 
@@ -120,20 +58,23 @@ def get_prior_mcmc(MAP_sample=None, fixed_s=False, **kwargs):
         else:
             s = fixed_s
 
-        # When running MCMC, we will sample in the parameters
-        #     (M0 - omega, M0 + omega) instead of (M0, omega)
-        # M0_m_omega = xu.with_unit(Angle('M0_m_omega'), u.radian)
-        # omega = xu.with_unit(Angle('omega'), u.radian)
-        # M0 = xu.with_unit(pm.Deterministic('M0', M0_m_omega + omega),
-        #                   u.radian)
-
-        if MAP_sample is not None:
-            # Auto-determine what parametrization to use based on MAP sample
-            M0, omega = pick_M0_omega_parametrization(MAP_sample, model)
+        if MAP_sample['e'] < 0.1:
+            omega_p_M0 = Angle('omega_p_M0')
+            omega_m_M0 = Angle('omega_m_M0')
+            omega = xu.with_unit(
+                pm.Deterministic('omega', 0.5 * (omega_p_M0 + omega_m_M0)),
+                u.radian
+            )
+            M0 = xu.with_unit(
+                pm.Deterministic('M0', 0.5 * (omega_p_M0 - omega_m_M0)),
+                u.radian
+            )
 
         else:
-            M0 = xu.with_unit(Angle('M0'), u.radian)
             omega = xu.with_unit(Angle('omega'), u.radian)
+            M0 = xu.with_unit(Angle('M0'), u.radian)
+
+        pm.Deterministic('t_peri', P * M0 / (2*np.pi))
 
         prior_mcmc = tj.JokerPrior.default(
             sigma_K0=kwargs['sigma_K0'],
@@ -142,4 +83,27 @@ def get_prior_mcmc(MAP_sample=None, fixed_s=False, **kwargs):
             pars={'P': P, 'M0': M0, 'omega': omega}
         )
 
+        # ecc = prior_mcmc.pars['e']
+        def get_phase(f, M0, e):
+            E = 2 * tt.arctan(tt.sqrt((1 - e) / (1 + e)) * tt.tan(0.5 * f))
+            M = E - e * tt.sin(E)
+            return (M + M0) % (2 * np.pi)
+
+        pm.Deterministic('phase_rv_max', get_phase(-omega, M0,
+                                                   prior_mcmc.pars['e']))
+        pm.Deterministic('phase_rv_min', get_phase(np.pi - omega, M0,
+                                                   prior_mcmc.pars['e']))
+
     return prior_mcmc, model
+
+
+def custom_init_mcmc(mcmc_init, MAP_sample, model):
+    mcmc_init['lnP'] = np.log(mcmc_init['P'])
+    mcmc_init['omega_p_M0'] = mcmc_init['omega'] + mcmc_init['M0']
+    mcmc_init['omega_m_M0'] = mcmc_init['omega'] - mcmc_init['M0']
+
+    mcmc_init = {k: v
+                 for k, v in mcmc_init.items()
+                 if k in model.named_vars.keys()}
+
+    return mcmc_init
