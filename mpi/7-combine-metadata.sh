@@ -16,6 +16,6 @@ cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
 
 date
 
-$CONDA_PREFIX/bin/hq combine_metadata -v
+$CONDA_PREFIX/bin/hq combine_metadata -v -o
 
 date

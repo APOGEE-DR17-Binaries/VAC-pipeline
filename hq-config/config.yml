@@ -82,3 +82,9 @@ mcmc_max_r_hat: 1.2
 
 ## This is the target acceptance ratio used for computing the dense mass matrix:
 mcmc_target_accept: 0.95
+
+
+##############################################################################
+## Parameters related to releasing the output
+##
+expand_subdir_column: FIELD
