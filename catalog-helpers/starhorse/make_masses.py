@@ -61,9 +61,11 @@ def worker(task):
             for pp in percentiles:
                 new_row[f'mass2_min_{pp}'] = np.nanpercentile(m2_min, pp)
             new_rows.append(new_row)
-            break
 
-    return at.QTable(new_rows)
+    if len(new_rows) == 0:
+        return None
+    else:
+        return at.QTable(new_rows)
 
 
 def main(run_path, pool, overwrite, seed):
@@ -100,8 +102,12 @@ def main(run_path, pool, overwrite, seed):
         })
 
     results = []
-    for r in pool.map(worker, tasks):
-        results.append(r)
+    for res in pool.map(worker, tasks):
+        if res is not None:
+            results.append(res)
+
+    result_table = at.vstack(results)
+    result_table.write(output_file)
 
 
 if __name__ == '__main__':
