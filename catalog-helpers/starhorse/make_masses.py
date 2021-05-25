@@ -73,7 +73,7 @@ def main(run_path, pool, overwrite, seed):
     output_file = output_path / 'starhorse_mass_m2_min.fits'
 
     if output_file.exists() and not overwrite:
-        logger.warn(f'Output file exsits at {output_file!s}')
+        logger.warn(f'Output file exists at {output_file!s}')
         return
 
     conf = Config(run_path / 'config.yml')
@@ -107,7 +107,7 @@ def main(run_path, pool, overwrite, seed):
             results.append(res)
 
     result_table = at.vstack(results)
-    result_table.write(output_file)
+    result_table.write(output_file, overwrite=True)
 
 
 if __name__ == '__main__':

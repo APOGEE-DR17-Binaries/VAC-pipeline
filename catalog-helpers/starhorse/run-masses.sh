@@ -17,7 +17,7 @@ cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries/catalog-helpers/st
 date
 
 mpirun python3 -m mpi4py.run -rc thread_level='funneled' \
-make_masses.py -v --mpi
+make_masses.py -v --mpi -o
 
 date
 
