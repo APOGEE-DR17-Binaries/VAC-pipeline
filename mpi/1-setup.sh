@@ -7,13 +7,15 @@
 #SBATCH -p cca
 #SBATCH -C rome
 
+# Setup Python environment
 source ~/.bash_profile
 init_conda
 conda activate dr17-binaries
-export HQ_RUN_PATH=/mnt/home/apricewhelan/projects/apogee-dr17-binaries/hq-config
-echo $HQ_RUN_PATH
 
-cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries
+# Relocate and initialize shell
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline
+source hq-config/init.sh
+echo $HQ_RUN_PATH
 
 date
 
