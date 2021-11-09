@@ -4,12 +4,13 @@
 #SBATCH -e logs/apogee-analyze.e%j
 #SBATCH -N 5
 #SBATCH -t 6:00:00
-#SBATCH -p cca 
+#SBATCH -p cca
 #SBATCH --constraint=rome
 
 source ~/.bash_profile
 init_conda
 conda activate dr17-binaries
+export HQ_RUN_PATH=/mnt/home/apricewhelan/projects/apogee-dr17-binaries/hq-config
 echo $HQ_RUN_PATH
 
 cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries

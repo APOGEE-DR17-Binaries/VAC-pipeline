@@ -1,0 +1,14 @@
+numpy
+scipy
+matplotlib
+jupyter
+astropy
+pymc3
+pymc3_ext
+emcee
+h5py
+pandas
+tqdm
+git+https://github.com/adrn/thejoker
+git+https://github.com/adrn/hq
+schwimmbad

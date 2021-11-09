@@ -1,23 +1,7 @@
 name: dr17-binaries
 
 dependencies:
-  - python=3.8
+  - python=3.9
   - pip
   - pip:
-      - numpy
-      - scipy
-      - matplotlib
-      - jupyter
-      - astropy
-      - pymc3
-      - pymc3_ext
-      - emcee
-      - h5py
-      - pandas
-      - tqdm
-      - git+https://github.com/adrn/thejoker.git@sample-stats
-      - git+https://github.com/adrn/hq.git
-      - git+https://github.com/adrn/schwimmbad.git
-
-variables:
-  HQ_RUN_PATH: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/hq-config
+      - -r requirements.txt
