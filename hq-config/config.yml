@@ -17,12 +17,12 @@ description: 'Running on APOGEE DR17'
 
 ## A path to a directory where HQ will store data products:
 ## (this defaults to the path where this config file sits)
-cache_path: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/cache/hq
+cache_path: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline/cache/hq
 
 ## The path to the source data file, which should contain radial velocity
 ## measurements, one per row, for multiple sources, and the data format as a
 ## string, which is passed to Astropy's Table reader:
-input_data_file: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/cache/allVisit-dr17-synspec-min3-calibverr.fits
+input_data_file: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline/cache/allVisit-dr17-synspec-min3-calibverr.fits
 input_data_format: fits
 
 ## The column name in the input data file that is unique per source:
@@ -42,7 +42,7 @@ time_scale: tdb
 ##
 
 ## Name of the prior definition file:
-prior_file: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/hq-config/prior.py
+prior_file: /mnt/home/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline/hq-config/prior.py
 
 ## Number of prior samples to generate and cache:
 n_prior_samples: 200_000_000
