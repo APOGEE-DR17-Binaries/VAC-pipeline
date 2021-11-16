@@ -8,7 +8,7 @@
 
 source ~/.bash_profile
 
-cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries/cache/hq
+cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline/cache/hq
 
 date
 

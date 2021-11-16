@@ -7,11 +7,6 @@
 #SBATCH -p cca
 #SBATCH -C rome
 
-# Setup Python environment
-source ~/.bash_profile
-init_conda
-conda activate dr17-binaries
-
 # Relocate and initialize shell
 cd /mnt/ceph/users/apricewhelan/projects/apogee-dr17-binaries/vac-pipeline
 source hq-config/init.sh
